@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2013 at 04:53 PM
+-- Generation Time: Dec 26, 2013 at 04:49 PM
 -- Server version: 5.1.72-2
 -- PHP Version: 5.3.3-7+squeeze17
 
@@ -549,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `tbl_pca` (
   `is_approved` int(11) DEFAULT '0',
   PRIMARY KEY (`pca_id`),
   KEY `fk_Pca_Partner_Organization1` (`partner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=133 ;
 
 -- --------------------------------------------------------
 
@@ -610,7 +610,21 @@ CREATE TABLE IF NOT EXISTS `tbl_pca_report` (
   `received_date` datetime DEFAULT NULL,
   PRIMARY KEY (`pca_report_id`),
   KEY `fk_Pca_Report_Pca1` (`pca_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_pca_report_file`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_pca_report_file` (
+  `pca_report_file_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pca_report_id` int(11) NOT NULL,
+  `file_name` varchar(256) NOT NULL,
+  PRIMARY KEY (`pca_report_file_id`),
+  KEY `pca_report_id` (`pca_report_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -658,18 +672,18 @@ CREATE TABLE IF NOT EXISTS `tbl_pca_target` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_pca_target_progress` (
-  `target_id` int(11) NOT NULL,
-  `unit_id` int(11) NOT NULL,
+  `pca_target_progress_id` int(11) NOT NULL AUTO_INCREMENT,
+  `target_progress_id` int(11) NOT NULL,
   `pca_id` int(11) NOT NULL,
   `total` int(11) NOT NULL,
   `current` int(11) NOT NULL COMMENT '					',
   `shortfall` int(11) NOT NULL,
   `start_date` date DEFAULT NULL,
   `received_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `active` tinyint(4) NOT NULL,
-  PRIMARY KEY (`target_id`,`unit_id`,`pca_id`,`current`,`received_date`),
+  PRIMARY KEY (`pca_target_progress_id`),
+  KEY `target_progress_id` (`target_progress_id`),
   KEY `pca_id` (`pca_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
 
 -- --------------------------------------------------------
 
@@ -690,6 +704,27 @@ CREATE TABLE IF NOT EXISTS `tbl_pca_target_progress_copy` (
   PRIMARY KEY (`target_id`,`unit_id`,`pca_id`,`current`,`received_date`),
   KEY `pca_id` (`pca_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_pca_target_progress_copy_last`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_pca_target_progress_copy_last` (
+  `pca_target_progress_id` int(11) NOT NULL AUTO_INCREMENT,
+  `target_progress_id` int(11) NOT NULL,
+  `target_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `pca_id` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `current` int(11) NOT NULL COMMENT '					',
+  `shortfall` int(11) NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `received_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`pca_target_progress_id`),
+  KEY `target_progress_id` (`target_progress_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=103 ;
 
 -- --------------------------------------------------------
 
@@ -720,7 +755,7 @@ CREATE TABLE IF NOT EXISTS `tbl_pca_user_action` (
   `action` varchar(32) NOT NULL,
   `datetime` datetime NOT NULL,
   PRIMARY KEY (`user_action_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=283 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=318 ;
 
 -- --------------------------------------------------------
 
@@ -816,7 +851,7 @@ CREATE TABLE IF NOT EXISTS `tbl_target` (
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`target_id`),
   KEY `fk_Target_Goal1` (`goal_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=87 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=89 ;
 
 -- --------------------------------------------------------
 
@@ -835,22 +870,51 @@ CREATE TABLE IF NOT EXISTS `tbl_target_activity` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_target_change`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_target_change` (
+  `target_change_id` int(11) NOT NULL AUTO_INCREMENT,
+  `target_progress_id` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  PRIMARY KEY (`target_change_id`),
+  KEY `target_progress_id` (`target_progress_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_target_progress`
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_target_progress` (
+  `target_progress_id` int(11) NOT NULL AUTO_INCREMENT,
   `target_id` int(11) NOT NULL DEFAULT '0',
   `unit_id` int(11) NOT NULL,
   `total` int(11) NOT NULL,
   `current` int(11) NOT NULL,
   `shortfall` int(11) NOT NULL,
-  `start_date` date DEFAULT NULL,
   `received_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `active` tinyint(4) NOT NULL,
-  PRIMARY KEY (`target_id`,`unit_id`,`current`,`active`,`received_date`),
-  KEY `fk_Target_has_Unit_Unit1` (`unit_id`),
-  KEY `target_id` (`target_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`target_progress_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_target_progress_copy`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_target_progress_copy` (
+  `target_progress_id` int(11) NOT NULL AUTO_INCREMENT,
+  `target_id` int(11) NOT NULL DEFAULT '0',
+  `unit_id` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `current` int(11) NOT NULL,
+  `shortfall` int(11) NOT NULL,
+  `received_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`target_progress_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -859,13 +923,14 @@ CREATE TABLE IF NOT EXISTS `tbl_target_progress` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_target_progress_pca_report` (
-  `target_id` int(11) NOT NULL,
-  `unit_id` int(11) NOT NULL,
+  `pca_report_target_progress_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pca_target_progress_id` int(11) NOT NULL,
   `pca_report_id` int(11) NOT NULL,
   `total` int(11) DEFAULT NULL,
-  PRIMARY KEY (`target_id`,`unit_id`,`pca_report_id`),
-  KEY `pca_report_id` (`pca_report_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`pca_report_target_progress_id`),
+  KEY `pca_report_id` (`pca_report_id`),
+  KEY `pca_target_progress_id` (`pca_target_progress_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -1007,208 +1072,17 @@ CREATE TABLE IF NOT EXISTS `YiiLog` (
   `logtime` int(11) DEFAULT NULL,
   `message` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3797 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4555 ;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `tbl_activity`
---
-ALTER TABLE `tbl_activity`
-  ADD CONSTRAINT `tbl_activity_ibfk_1` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`);
-
---
--- Constraints for table `tbl_goal`
---
-ALTER TABLE `tbl_goal`
-  ADD CONSTRAINT `tbl_goal_ibfk_1` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`);
-
---
--- Constraints for table `tbl_grant`
---
-ALTER TABLE `tbl_grant`
-  ADD CONSTRAINT `tbl_grant_ibfk_1` FOREIGN KEY (`donor_id`) REFERENCES `tbl_donor` (`donor_id`);
-
---
--- Constraints for table `tbl_gw_pca_loc`
---
-ALTER TABLE `tbl_gw_pca_loc`
-  ADD CONSTRAINT `tbl_gw_pca_loc_ibfk_1` FOREIGN KEY (`gateway_id`) REFERENCES `tbl_gateway` (`gateway_id`),
-  ADD CONSTRAINT `tbl_gw_pca_loc_ibfk_3` FOREIGN KEY (`location_id`) REFERENCES `tbl_location` (`location_id`),
-  ADD CONSTRAINT `tbl_gw_pca_loc_ibfk_4` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_intermediate_result`
---
-ALTER TABLE `tbl_intermediate_result`
-  ADD CONSTRAINT `tbl_intermediate_result_ibfk_1` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`);
-
---
--- Constraints for table `tbl_locality`
---
-ALTER TABLE `tbl_locality`
-  ADD CONSTRAINT `tbl_locality_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `tbl_region` (`region_id`);
-
---
--- Constraints for table `tbl_location`
---
-ALTER TABLE `tbl_location`
-  ADD CONSTRAINT `tbl_location_ibfk_1` FOREIGN KEY (`locality_id`) REFERENCES `tbl_locality` (`locality_id`);
-
---
--- Constraints for table `tbl_location_gateway`
---
-ALTER TABLE `tbl_location_gateway`
-  ADD CONSTRAINT `tbl_location_gateway_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `tbl_location` (`location_id`),
-  ADD CONSTRAINT `tbl_location_gateway_ibfk_2` FOREIGN KEY (`gateway_id`) REFERENCES `tbl_gateway` (`gateway_id`);
-
---
--- Constraints for table `tbl_partner_location`
---
-ALTER TABLE `tbl_partner_location`
-  ADD CONSTRAINT `tbl_partner_location_ibfk_1` FOREIGN KEY (`partner_id`) REFERENCES `tbl_partner_organization` (`partner_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_partner_location_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `tbl_location` (`location_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_partner_organization_activity`
---
-ALTER TABLE `tbl_partner_organization_activity`
-  ADD CONSTRAINT `tbl_partner_organization_activity_ibfk_1` FOREIGN KEY (`partner_id`) REFERENCES `tbl_partner_organization` (`partner_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_partner_organization_activity_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`activity_id`);
-
---
--- Constraints for table `tbl_pca`
---
-ALTER TABLE `tbl_pca`
-  ADD CONSTRAINT `tbl_pca_ibfk_1` FOREIGN KEY (`partner_id`) REFERENCES `tbl_partner_organization` (`partner_id`);
-
---
--- Constraints for table `tbl_pca_activity`
---
-ALTER TABLE `tbl_pca_activity`
-  ADD CONSTRAINT `tbl_pca_activity_ibfk_1` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_pca_activity_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`activity_id`);
-
---
--- Constraints for table `tbl_pca_file`
---
-ALTER TABLE `tbl_pca_file`
-  ADD CONSTRAINT `tbl_pca_file_ibfk_1` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
---
--- Constraints for table `tbl_pca_grant`
---
-ALTER TABLE `tbl_pca_grant`
-  ADD CONSTRAINT `tbl_pca_grant_ibfk_2` FOREIGN KEY (`grant_id`) REFERENCES `tbl_grant` (`grant_id`),
-  ADD CONSTRAINT `tbl_pca_grant_ibfk_3` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `tbl_pca_report`
---
-ALTER TABLE `tbl_pca_report`
-  ADD CONSTRAINT `tbl_pca_report_ibfk_1` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`);
-
---
--- Constraints for table `tbl_pca_rrp5output`
---
-ALTER TABLE `tbl_pca_rrp5output`
-  ADD CONSTRAINT `tbl_pca_rrp5output_ibfk_3` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_pca_rrp5output_ibfk_4` FOREIGN KEY (`rrp5_output_id`) REFERENCES `tbl_rrp5_output` (`rrp5_output_id`);
-
---
--- Constraints for table `tbl_pca_sector`
---
-ALTER TABLE `tbl_pca_sector`
-  ADD CONSTRAINT `tbl_pca_sector_ibfk_3` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_pca_sector_ibfk_4` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`);
-
---
--- Constraints for table `tbl_pca_target`
---
-ALTER TABLE `tbl_pca_target`
-  ADD CONSTRAINT `tbl_pca_target_ibfk_1` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`),
-  ADD CONSTRAINT `tbl_pca_target_ibfk_2` FOREIGN KEY (`target_id`) REFERENCES `tbl_target` (`target_id`);
-
---
 -- Constraints for table `tbl_pca_target_progress`
 --
 ALTER TABLE `tbl_pca_target_progress`
   ADD CONSTRAINT `tbl_pca_target_progress_ibfk_1` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`);
-
---
--- Constraints for table `tbl_pca_ufile`
---
-ALTER TABLE `tbl_pca_ufile`
-  ADD CONSTRAINT `tbl_pca_ufile_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `tbl_uploaded_file` (`file_id`),
-  ADD CONSTRAINT `tbl_pca_ufile_ibfk_3` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_pca_wbs`
---
-ALTER TABLE `tbl_pca_wbs`
-  ADD CONSTRAINT `tbl_pca_wbs_ibfk_2` FOREIGN KEY (`wbs_id`) REFERENCES `tbl_wbs` (`wbs_id`),
-  ADD CONSTRAINT `tbl_pca_wbs_ibfk_3` FOREIGN KEY (`pca_id`) REFERENCES `tbl_pca` (`pca_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_region`
---
-ALTER TABLE `tbl_region`
-  ADD CONSTRAINT `tbl_region_ibfk_1` FOREIGN KEY (`governorate_id`) REFERENCES `tbl_governorate` (`governorate_id`);
-
---
--- Constraints for table `tbl_rrp5_output`
---
-ALTER TABLE `tbl_rrp5_output`
-  ADD CONSTRAINT `tbl_rrp5_output_ibfk_1` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`);
-
---
--- Constraints for table `tbl_sector_role`
---
-ALTER TABLE `tbl_sector_role`
-  ADD CONSTRAINT `tbl_sector_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_sector_role_ibfk_3` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_sector_user`
---
-ALTER TABLE `tbl_sector_user`
-  ADD CONSTRAINT `tbl_sector_user_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_sector_user_ibfk_4` FOREIGN KEY (`sector_id`) REFERENCES `tbl_sector` (`sector_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_target`
---
-ALTER TABLE `tbl_target`
-  ADD CONSTRAINT `tbl_target_ibfk_1` FOREIGN KEY (`goal_id`) REFERENCES `tbl_goal` (`goal_id`);
-
---
--- Constraints for table `tbl_target_activity`
---
-ALTER TABLE `tbl_target_activity`
-  ADD CONSTRAINT `tbl_target_activity_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`activity_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `tbl_target_activity_ibfk_2` FOREIGN KEY (`target_id`) REFERENCES `tbl_target` (`target_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
---
--- Constraints for table `tbl_target_progress`
---
-ALTER TABLE `tbl_target_progress`
-  ADD CONSTRAINT `tbl_target_progress_ibfk_4` FOREIGN KEY (`unit_id`) REFERENCES `tbl_unit` (`unit_id`),
-  ADD CONSTRAINT `tbl_target_progress_ibfk_5` FOREIGN KEY (`target_id`) REFERENCES `tbl_target` (`target_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_target_progress_pca_report`
---
-ALTER TABLE `tbl_target_progress_pca_report`
-  ADD CONSTRAINT `fk_Target_Progress_has_Pca_Report_Target_Progress1` FOREIGN KEY (`target_id`, `unit_id`) REFERENCES `tbl_target_progress` (`target_id`, `unit_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `tbl_target_progress_pca_report_ibfk_1` FOREIGN KEY (`pca_report_id`) REFERENCES `tbl_pca_report` (`pca_report_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `tbl_wbs`
---
-ALTER TABLE `tbl_wbs`
-  ADD CONSTRAINT `tbl_wbs_ibfk_1` FOREIGN KEY (`ir_id`) REFERENCES `tbl_intermediate_result` (`ir_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
