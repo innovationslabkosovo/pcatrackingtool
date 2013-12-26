@@ -1,0 +1,99 @@
+<fieldset class="pca_wbs">
+	 	<legend>WBS</legend>
+
+	 	<div class="wbs_row">
+			
+				
+				<?php
+				//create
+				if ($model->PcaWbs[0] == NULL) 
+				{ 	
+					
+					$sector_id = 99;
+					$ir_id = 999;
+					?>
+				<div class="pcaWbsDiv" id='pcaWbsDiv1'>
+					<h5>WBS <span id="wbsNumber">1</span></h5>
+					<div class="row">
+					<?php  echo CHtml::dropDownList('wbs_sector_id1','',CHtml::listData(Sector::model()->findAll(),'sector_id','name'),array(									
+												'prompt'=>'Select Sector',
+												'class'=>'wbsSector',
+												
+											) 
+					 ); ?>
+					 </div>
+			  		<div class="row">
+						<?php echo $form->labelEx($model,'Select Intermediate Result'); ?>
+							<?php echo CHTML::dropDownList('ir_id1','intermediateResult[]',CHtml::listData(IntermediateResult::model()->findAll('sector_id='.$sector_id),'ir_id','name'),array(
+							'prompt'=>'Select Intermediate Result',
+							'class'=>'wbsIr',
+							)
+							); ?>
+					<?php //echo $form->error($model,'pcaTargetProgressReles'); ?>
+					</div>
+					
+					<div class="row">
+						<?php echo $form->labelEx($model,'PcaWbs'); ?>
+						<?php// echo $form->textField($model,'TargetActivity',array('size'=>45,'maxlength'=>45)); ?>
+						<?php echo $form->dropDownList($model,'PcaWbs[]', CHtml::listData(Wbs::model()->findAll('ir_id='.$ir_id),'wbs_id','name'), array(
+						'prompt'=>'Select WBS Activity',
+						'id'=>'wbs_id1',
+						)
+						); ?>
+						<?php echo $form->error($model,'PcaWbs'); ?>
+			  		</div>	 
+		 		</div>
+
+		  	<?php }else{
+
+		  	//update
+
+		  	foreach ($model->PcaWbs as $key => $value) {	
+		  		
+		  		$sector_id = $value->IntermediateResult->Sector->sector_id;
+		  		$ir_id = $value->IntermediateResult->ir_id;
+		  		$wbs_id = $value->wbs_id;		  		
+		  		$number = $key+1;
+
+
+		  		?>
+		  		<div class="pcaWbsDiv" id="pcaWbsDiv<?php echo $number; ?>" >
+			  		<h5>WBS <span id="wbsNumber"><?=$number?></span></h5>
+			  		<div class="row">
+						<?php  echo CHtml::dropDownList('wbs_sector_id'.$number,'',CHtml::listData(Sector::model()->findAll(),'sector_id','name'),array(							
+													'prompt'=>'Select Sector',
+													'class'=>'wbsSector',
+													'options' => array($sector_id =>array('selected'=>true))
+												) );
+						?>
+					</div>
+			  		<div class="row">
+						<?php echo $form->labelEx($model,'Select Intermediate Result'); ?>
+						<?php echo CHTML::dropDownList('ir_id'.$number,'intermediateResult[]',CHtml::listData(IntermediateResult::model()->findAll('sector_id='.$sector_id),'ir_id','name'),array(
+													'prompt'=>'Select Intermediate Result',
+													'class'=>'wbsIr',
+													'options' => array($ir_id =>array('selected'=>true))
+						)); ?>
+						<?php //echo $form->error($model,'pcaTargetProgressReles'); ?>
+					</div>
+					
+					<div class="row">
+						<?php echo $form->labelEx($model,'PcaWbs'); ?>
+						<?php// echo $form->textField($model,'TargetActivity',array('size'=>45,'maxlength'=>45)); ?>
+						<?php echo $form->dropDownList($model,'PcaWbs[]', CHtml::listData(Wbs::model()->findAll('ir_id='.$ir_id),'wbs_id','name'), array(
+													'prompt'=>'Select WBS Activity',
+													'id'=>'wbs_id'.$number,
+													'options' => array($wbs_id =>array('selected'=>true))
+						)); ?>
+						<?php echo $form->error($model,'PcaWbs'); ?>
+			  		</div>	 
+			  	</div>
+		<?php }} ?>
+	
+
+		
+
+		<a class="addPcaWbs" href = 'javascript:void(0)' style="float:right" >Add Another PCA WBS</a> 
+		
+		</div>
+	 </fieldset>

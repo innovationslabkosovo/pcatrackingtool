@@ -1,0 +1,34 @@
+div.wide.form .row{
+	clear: none !important;
+}
+
+/*.line1, .line2, .line3 {
+	display: inline-block;
+}*/
+div.wide .section{
+	width:180px;
+	margin-right: 100px;
+	float:left;
+}
+.search-form{
+	width: 890px !important;
+}
+.grid-view{
+	width: 910px;
+}
+/*
+div.wide.form  input, div.wide.form  label {
+    display:block;
+}*/
+div.wide.form label{
+	text-align: left;
+	width: 270px;
+}
+
+/*
+div.wide.form input{
+
+display:inline;
+    margin:1px 20px 1px 1px;
+}
+*/
